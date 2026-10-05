@@ -1,10 +1,8 @@
 const express = require('express');
 
 const _ = express.Router()
+const Registration = require ("./auth/registion.js")
 
-_.use("/authentication",()=>{
-    console.log(" loguidn" );
-    
-})
+_.use("/authentication",Registration)
 
 module.exports=_
