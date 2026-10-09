@@ -1,3 +1,4 @@
+require("dotenv").config()
 const express = require('express');
 const  route  = require('./route');
 const mongoos = require('./db/mongoos');
