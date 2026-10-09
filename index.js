@@ -1,7 +1,10 @@
 const express = require('express');
 const  route  = require('./route');
+const mongoos = require('./db/mongoos');
 const app = express()
 const port = 3000
+
+mongoos()
 
 // medal ware
 app.use(express.json())
