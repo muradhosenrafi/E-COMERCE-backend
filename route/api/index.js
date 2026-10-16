@@ -1,8 +1,10 @@
-const express = require('express');
+import express from "express";
+import Registration from "./auth/registion.js";
+import Login from "./auth/login.js";
 
-const _ = express.Router()
-const Registration = require ("./auth/registion.js")
+const _ = express.Router();
 
-_.use("/authentication",Registration)
+_.use("/authentication", Registration);
+_.use("/authentication", Login);
 
-module.exports=_
+export default _;

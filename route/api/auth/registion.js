@@ -1,8 +1,8 @@
-const express = require("express");
-const registionController = require("../../../controllers/registrationControllers");
+import express from "express";
+import registrationController from "../../../controllers/registrationControllers.js";
+
 const _ = express.Router();
 
+_.post("/registration", registrationController);
 
-_.post("/registion",registionController);
-
-module.exports = _ ;
+export default _;

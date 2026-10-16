@@ -1,36 +1,48 @@
-const emailRegex = require("../utiles/emailRegex");
-const passwordRegex = require("../utiles/passwordRegex");
-const userSchema = require("../model/userSchima");
+import emailRegex from "../utiles/emailRegex.js";
+import passwordRegex from "../utiles/passwordRegex.js";
+import userSchema from "../model/userSchima.js";
+import bcrypt from "bcrypt";
 
 // this post method
 const registionController = async (req, res) => {
-  let { username, email, password } = req.body;
-  if (!username) {
-    res.send("username required");
-  } else if (!email) {
-    res.send("email required");
-  } else if (!emailRegex(email)) {
-    res.send("valid email required");
-  } else if (!password) {
-    res.send("password required");
-  } else if (!passwordRegex(password)) {
-    res.send(" valid password required");
-  } else {
-    console.log(req.body);
+  try {
+    let { username, email, password } = req.body;
 
-    let existiguser = await userSchema.find({email:email});
-
-    if (existiguser.length > 0) {
-      console.log("plz login");
-    } else {
-      const data = new userSchema({
-        username,
-        email,
-        password,
-      });
-      data.save()
-      res.send(data)
+    if (!username) {
+      return res.send("username required");
     }
+    if (!email) {
+      return res.send("email required");
+    }
+    if (!emailRegex(email)) {
+      return res.send("valid email required");
+    }
+    if (!password) {
+      return res.send("password required");
+    }
+    if (!passwordRegex(password)) {
+      return res.send("valid password required");
+    }
+
+    const existingUser = await userSchema.findOne({ email });
+    if (existingUser) {
+      return res.send("email already exists, please login");
+    }
+
+    const hash = await bcrypt.hash(password, 10);
+
+    const data = new userSchema({
+      username,
+      email,
+      password: hash,
+    });
+
+    await data.save();
+    res.send(data);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("server error");
   }
 };
-module.exports = registionController;
+
+export default registionController;

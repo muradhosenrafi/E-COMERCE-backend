@@ -1,10 +1,8 @@
-const passwordRegex= ( password)=>{
+const passwordRegex = (password) => {
+  if (/^(?=.*[A-Za-z])(?=.*\d).{8,}$/.test(password)) {
+    return true;
+  }
+  return false;
+};
 
-
-
-    if (  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)){
-        return true
-    }
-    
-}
-module.exports=passwordRegex
+export default passwordRegex;

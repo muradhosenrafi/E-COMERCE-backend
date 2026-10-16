@@ -1,11 +1,11 @@
-const dns = require("node:dns/promises");
+import dns from "node:dns/promises";
+import express from "express";
+import Authentication from "./api/index.js";
+
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
-const express = require('express');
+const _ = express.Router();
 
-const _ = express.Router()
-const Authentication = require ("./api/index")
+_.use(`${process.env.API_URL}`, Authentication);
 
-_.use(`${process.env.API_URL}`,Authentication)
-
-module.exports=_
+export default _;
