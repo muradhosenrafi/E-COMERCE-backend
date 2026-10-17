@@ -1,22 +1,47 @@
 import mongoose from "mongoose";
-const {Schema}=mongoose
 
-const userSchema=new Schema({
-    username:{
-        type:String,
-        require:true
+const { Schema } = mongoose;
 
+const userSchema = new Schema({
+  username: {
+    type: String,
+    required: true,
+  },
+
+  email: {
+    type: String,
+    required: true,
+  },
+
+  password: {
+    type: String,
+    required: true,
+  },
+
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+
+  otp: {
+    type: String,
+    select: false,
+  },
+
+  otpExpiresAt: {
+    type: Date,
+  },
+});
+
+// শুধু unverified user মেয়াদ শেষে delete হবে।
+userSchema.index(
+  { otpExpiresAt: 1 },
+  {
+    expireAfterSeconds: 0,
+    partialFilterExpression: {
+      isVerified: false,
     },
-    email:{
-        type:String,
-        require:true
-
-    },
-    password:{
-        type:String,
-        require:true
-
-    },
-})
+  }
+);
 
 export default mongoose.model("UserList", userSchema);

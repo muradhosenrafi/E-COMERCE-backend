@@ -3,28 +3,50 @@ import passwordRegex from "../utiles/passwordRegex.js";
 import userSchema from "../model/userSchima.js";
 import bcrypt from "bcrypt";
 
-// this post method
 const loginController = async (req, res) => {
-  let { email, password } = req.body;
-  if (!email) {
-    res.send("email required");
-  } else if (!emailRegex(email)) {
-    res.send("valid email required");
-  } else if (!password) {
-    res.send("password required");
-  } else if (!passwordRegex(password)) {
-    res.send("valid password required");
-  } else {
-   let data = await userSchema.find({email:email})
-  if(data.length>0){
-  console.log("login data");
-  
-  }else{
+  try {
+    const { email, password } = req.body;
 
-    res.send({error:"ivalite cardintional"})
-  }
-   
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+    if (!emailRegex(email)) {
+      return res.status(400).json({ message: "Valid email is required" });
+    }
+    if (!password) {
+      return res.status(400).json({ message: "Password is required" });
+    }
+    if (!passwordRegex(password)) {
+      return res.status(400).json({ message: "Valid password is required" });
+    }
 
+    // email database e ache kina check
+    const user = await userSchema.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "Email not found. Please register first." });
+    }
+
+    // password match kora
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(401).json({ message: "Incorrect password." });
+    }
+
+    // login successful
+    return res.status(200).json({
+      message: "Login successful",
+      user: {
+        id: user._id,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error. Please try again." });
   }
 };
 
