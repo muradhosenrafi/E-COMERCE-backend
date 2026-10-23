@@ -4,6 +4,6 @@ const _ = express.Router();
 
 
 
-_.post("/otp",otpControllers);
+_.post("/verify-otp",otpControllers);
 
 export default _;

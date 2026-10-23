@@ -42,7 +42,7 @@ const registionController = async (req, res) => {
     });
     console.log(otp);
 
-    const otpExpiresAt = new Date(Date.now() + 30 * 1000);
+    const otpExpiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
     const data = new userSchema({
       username,
