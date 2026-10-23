@@ -31,6 +31,17 @@ const userSchema = new Schema({
   otpExpiresAt: {
     type: Date,
   },
+  
+  resetTokenHash: {
+  type: String,
+  select: false,
+},
+resetTokenExpiresAt: {
+  type: Date,
+  select: false,
+},
+
+
 });
 
 // শুধু unverified user মেয়াদ শেষে delete হবে।
